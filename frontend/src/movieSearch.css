@@ -1,0 +1,84 @@
+.movie-search-wrapper {
+  flex: 3;
+  padding: 0 80px;
+  width: 80%;
+  height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-search-header {
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+}
+
+.movie-search-header h2 {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.movie-search-header input {
+  width: 97%;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.movie-search-header input:hover {
+    transform: scale(1.005);
+}
+
+.movie-search-header input:focus {
+    transform: scale(1.005);
+    outline: none;
+}
+
+.movie-list {
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.movie-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  margin: 0 10px 0 20px;
+}
+
+.movie-card:hover {
+  transform: scale(1.005);
+}
+
+.movie-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.movie-description {
+  font-style: italic;
+  color: #555;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d2c8c4;
+  border-radius: 5px;
+}
