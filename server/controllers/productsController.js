@@ -66,10 +66,10 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
     console.log(req.body)
 
-    const {title, description, category, type, stock} = req.body;
+    const { title, description, category, type, status = "available", condition = "new" } = req.body;
 
-    if (!title || !description || !category || !type || !stock) {
-        return res.status(400).json({message: 'All fields are required'});
+    if (!title || !description || !category || !type) {
+        return res.status(400).json({ message: 'Wymagane pola: tytuł, opis, kategoria i typ' });
     }
 
     try {
@@ -78,7 +78,9 @@ const createProduct = async (req, res) => {
             description,
             category,
             type,
-            stock
+            status,
+            condition,
+            reviews: []
         });
 
         await newProduct.save();
@@ -87,7 +89,6 @@ const createProduct = async (req, res) => {
         res.status(500).json({message: 'Error creating product', error: error.message});
     }
 }
-
 const updateProduct = async (req, res) => {
     const {id} = req.params;
     const {title, description, category, type, stock} = req.body;

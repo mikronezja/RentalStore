@@ -4,6 +4,24 @@ const {
     RentalHistory
 } = require('../models/index');
 
+
+const getAllRents = async (req, res) => {
+    const {limit = 10, page = 1} = req.query;
+    const query = {};
+
+    try {
+        const rents = await RentalHistory.find(query)
+            .populate('product client worker', 'title name surname')
+            .skip(page > 0 ? (page - 1) * limit : 0)
+            .limit(parseInt(limit))
+            .sort({createdAt: -1});
+
+        res.status(200).json(rents);
+    } catch (error) {
+        res.status(500).json({message: 'Błąd podczas pobierania wypożyczeń', error: error.message});
+    }
+}
+
 const rentProduct = async (req, res) => {
     const {productId, clientId, workerId, rentalTime = 14} = req.body;
 
@@ -122,5 +140,6 @@ const returnProduct = async (req, res) => {
 
 module.exports = {
     rentProduct,
-    returnProduct
+    returnProduct,
+    getAllRents
 }
