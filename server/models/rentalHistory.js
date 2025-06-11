@@ -33,7 +33,7 @@ const rentalHistorySchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['rented', 'completed', 'overdue', 'damaged', 'lost', 'cancelled'],
+        enum: ['rented', 'completed', 'damaged', 'lost', 'cancelled'],
         default: 'rented'
     },
     notes: {
