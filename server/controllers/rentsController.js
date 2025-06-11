@@ -94,27 +94,35 @@ const rentProduct = async (req, res) => {
 
 // zwrot produktu
 const returnProduct = async (req, res) => {
-    const {rentalId, conditionAfter} = req.body;
+    const {productId} = req.body;
+    let {conditionAfter} = req.body;
 
-    if (!rentalId || !conditionAfter) {
-        return res.status(400).json({message: 'Wszystkie pola są wymagane'});
+    if (!productId) {
+        return res.status(400).json({message: 'Identyfikator produktu jest wymagany'});
     }
 
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-        const rental = await RentalHistory.findById(rentalId).session(session);
+        // Znajdujemy aktywne wypożyczenie dla danego produktu
+        const rental = await RentalHistory.findOne({
+            product: productId,
+            status: 'rented'
+        }).session(session);
 
-        if (!rental || rental.status !== 'rented') {
+        if (!rental) {
             await session.abortTransaction();
             session.endSession();
-            return res.status(400).json({message: 'Nieprawidłowy identyfikator wypożyczenia lub produkt nie jest wypożyczony'});
+            return res.status(400).json({message: 'Nie znaleziono aktywnego wypożyczenia dla tego produktu'});
         }
+
+        // Jeśli conditionAfter nie jest podany, używamy aktualnego stanu produktu
+        conditionAfter = conditionAfter || rental.conditionBefore;
 
         // Aktualizacja statusu produktu
         const product = await Product.findByIdAndUpdate(
-            rental.product,
+            productId,
             {
                 status: 'available',
                 condition: conditionAfter
@@ -130,13 +138,24 @@ const returnProduct = async (req, res) => {
 
         rental.status = 'returned';
         rental.conditionAfter = conditionAfter;
+        rental.rentalPeriod.returned = new Date(); // Dodanie daty zwrotu
         await rental.save({session});
+
+        // Zatwierdzenie transakcji
+        await session.commitTransaction();
+        session.endSession();
+
+        // Odpowiedź sukcesu
+        return res.status(200).json({
+            message: 'Produkt został pomyślnie zwrócony',
+            rental: rental
+        });
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
         return res.status(500).json({message: 'Błąd podczas zwrotu produktu', error: error.message});
     }
-}
+};
 
 module.exports = {
     rentProduct,

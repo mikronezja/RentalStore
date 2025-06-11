@@ -282,7 +282,7 @@ const seedDatabase = async () => {
                     end: new Date("2023-05-15"),
                     returned: new Date("2023-05-14")
                 },
-                status: "completed",
+                status: "returned",
                 notes: "Zwrócono w terminie, bez uszkodzeń",
                 conditionBefore: "good",
                 conditionAfter: "good"
