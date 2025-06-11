@@ -2,7 +2,6 @@ const {
     Product,
     Order
 } = require('../models/index');
-const order = require('../models/order');
 
 // to be written ... 
 const addProductToOrder = async (req, res) => 
