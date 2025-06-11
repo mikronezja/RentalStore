@@ -1,5 +1,6 @@
 const {
-    Product
+    Product,
+    RentalHistory
 } = require('../models/index');
 
 // Get all products
@@ -8,7 +9,7 @@ const getAllProducts = async (req, res) => {
     const query = {};
 
     if (title) {
-        query.title = { $regex: title, $options: 'i' };
+        query.title = {$regex: title, $options: 'i'};
     }
 
     try {
@@ -21,13 +22,30 @@ const getAllProducts = async (req, res) => {
 
 // get most popular products
 const getMostPopularProducts = async (req, res) => {
-    const {limit = 10} = req.query;
+    const {limit = 3} = req.query;
+
     try {
-        const products = await Product.find().sort({reserved: -1}).limit(parseInt(limit));
-        res.status(200).json(products);
+        const popularProducts = await RentalHistory.aggregate([
+            {$group: {_id: "$product", count: {$sum: 1}}},
+            {$sort: {count: -1}},
+            {$limit: parseInt(limit)},
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'productDetails'
+                }
+            },
+            {$unwind: '$productDetails'},
+            {$replaceRoot: {newRoot: '$productDetails'}}
+        ]);
+
+        res.status(200).json(popularProducts);
     } catch (error) {
         res.status(500).json({message: 'Error fetching popular products', error: error.message});
     }
+
 }
 
 // Get a single product by ID
