@@ -10,10 +10,12 @@ const PORT = process.env.PORT || 3000
 ;
 
 const productsRouter = require('./route/productsRoutes');
+const rentsRouter = require('./route/rentsRoutes');
 
 app.use(cors());
 app.use(express.json());
 app.use('/api/products', productsRouter);
+app.use('/api/rents', rentsRouter);
 
 
 app.listen((PORT), async () => {

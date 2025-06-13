@@ -1,5 +1,6 @@
 const {
-    Product
+    Product,
+    RentalHistory
 } = require('../models/index');
 
 // Get all products
@@ -8,7 +9,7 @@ const getAllProducts = async (req, res) => {
     const query = {};
 
     if (title) {
-        query.title = { $regex: title, $options: 'i' };
+        query.title = {$regex: title, $options: 'i'};
     }
 
     try {
@@ -21,13 +22,30 @@ const getAllProducts = async (req, res) => {
 
 // get most popular products
 const getMostPopularProducts = async (req, res) => {
-    const {limit = 10} = req.query;
+    const {limit = 3} = req.query;
+
     try {
-        const products = await Product.find().sort({reserved: -1}).limit(parseInt(limit));
-        res.status(200).json(products);
+        const popularProducts = await RentalHistory.aggregate([
+            {$group: {_id: "$product", count: {$sum: 1}}},
+            {$sort: {count: -1}},
+            {$limit: parseInt(limit)},
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'productDetails'
+                }
+            },
+            {$unwind: '$productDetails'},
+            {$replaceRoot: {newRoot: '$productDetails'}}
+        ]);
+
+        res.status(200).json(popularProducts);
     } catch (error) {
         res.status(500).json({message: 'Error fetching popular products', error: error.message});
     }
+
 }
 
 // Get a single product by ID
@@ -48,10 +66,10 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
     console.log(req.body)
 
-    const {title, description, category, type, stock} = req.body;
+    const { title, description, category, type, status = "available", condition = "new" } = req.body;
 
-    if (!title || !description || !category || !type || !stock) {
-        return res.status(400).json({message: 'All fields are required'});
+    if (!title || !description || !category || !type) {
+        return res.status(400).json({ message: 'Wymagane pola: tytuł, opis, kategoria i typ' });
     }
 
     try {
@@ -60,7 +78,9 @@ const createProduct = async (req, res) => {
             description,
             category,
             type,
-            stock
+            status,
+            condition,
+            reviews: []
         });
 
         await newProduct.save();
@@ -69,7 +89,6 @@ const createProduct = async (req, res) => {
         res.status(500).json({message: 'Error creating product', error: error.message});
     }
 }
-
 const updateProduct = async (req, res) => {
     const {id} = req.params;
     const {title, description, category, type, stock} = req.body;

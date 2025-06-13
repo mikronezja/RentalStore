@@ -1,11 +1,11 @@
 const Product = require('./product');
 const Worker = require('./worker');
-const Order = require('./order');
 const Client = require('./client');
+const RentalHistory = require('./rentalHistory');
 
 module.exports = {
     Product,
     Worker,
-    Order,
-    Client
+    Client,
+    RentalHistory
 }
