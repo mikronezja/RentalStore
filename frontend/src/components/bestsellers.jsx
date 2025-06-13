@@ -1,12 +1,18 @@
+import React from 'react';
+
 function Bestsellers({ movies }) {
   return (
-    <div style={{ flex: 1, paddingLeft: '50px', borderLeft: '1px solid #ccc', position: 'sticky', top: '30px', alignSelf: 'flex-start' }}>
-      <h2 style={{ fontSize: '50px'}}>Bestsellery</h2>
-      <ul>
+    <div className="bestsellers-wrapper">
+      <h2 className="bestsellers-title">Bestsellery</h2>
+      <div className="bestseller-cards">
         {movies.map((movie, index) => (
-          <li key={index}><strong>{movie}</strong></li>
+          <div key={index} className="bestseller-card">
+            <h3 className="bestseller-name">{movie.title}</h3>
+            <p className="bestseller-description">{movie.description}</p>
+            <p className="bestseller-opinion">„jakas super cool opinia hihi”</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
