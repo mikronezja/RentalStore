@@ -23,7 +23,7 @@ router.route("/:id")
 router.route("/:id/rentals")
     .get(getClientRentalHistory);
 
-router.route("/debtors").get(getDebtors);
+//router.route("/debtors").get(getDebtors);
 
 
 module.exports = router;
