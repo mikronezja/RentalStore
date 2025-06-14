@@ -7,15 +7,14 @@ const {
 
 const getAllRents = async (req, res) => {
     const {limit = 10, page = 1} = req.query;
-    const query = {};
-
     try {
-        const rents = await RentalHistory.find(query)
-            .populate('product client worker', 'title name surname')
+        const rents = await RentalHistory.find({})
+            .populate({ path: 'product', select: 'title' })
+            .populate({ path: 'client', select: 'firstName lastName' })
+            .populate({ path: 'worker', select: 'name' }) // Założenie, że model Worker ma pole 'name'
             .skip(page > 0 ? (page - 1) * limit : 0)
             .limit(parseInt(limit))
             .sort({createdAt: -1});
-
         res.status(200).json(rents);
     } catch (error) {
         res.status(500).json({message: 'Błąd podczas pobierania wypożyczeń', error: error.message});
@@ -292,58 +291,41 @@ const rentProduct = async (req, res) => {
 
 // zwrot produktu
 const returnProduct = async (req, res) => {
-    const {productId} = req.body;
-    let {conditionAfter} = req.body;
-
-    if (!productId) {
-        return res.status(400).json({message: 'Identyfikator produktu jest wymagany'});
-    }
+    const { rentalId } = req.params;
+    let { conditionAfter } = req.body;
 
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-        // Znajdujemy aktywne wypożyczenie dla danego produktu
         const rental = await RentalHistory.findOne({
-            product: productId,
+            _id: rentalId,
             status: 'rented'
         }).session(session);
 
         if (!rental) {
             await session.abortTransaction();
             session.endSession();
-            return res.status(400).json({message: 'Nie znaleziono aktywnego wypożyczenia dla tego produktu'});
+            return res.status(404).json({message: 'Nie znaleziono aktywnego wypożyczenia o podanym ID'});
         }
 
-        // Jeśli conditionAfter nie jest podany, używamy aktualnego stanu produktu
+        const productId = rental.product;
         conditionAfter = conditionAfter || rental.conditionBefore;
 
-        // Aktualizacja statusu produktu
-        const product = await Product.findByIdAndUpdate(
+        await Product.findByIdAndUpdate(
             productId,
-            {
-                status: 'available',
-                condition: conditionAfter
-            },
-            {new: true, session}
+            { status: 'available', condition: conditionAfter },
+            { new: true, session }
         );
-
-        if (!product) {
-            await session.abortTransaction();
-            session.endSession();
-            return res.status(400).json({message: 'Produkt nie został znaleziony'});
-        }
 
         rental.status = 'returned';
         rental.conditionAfter = conditionAfter;
-        rental.rentalPeriod.returned = new Date(); // Dodanie daty zwrotu
+        rental.rentalPeriod.returned = new Date();
         await rental.save({session});
 
-        // Zatwierdzenie transakcji
         await session.commitTransaction();
         session.endSession();
 
-        // Odpowiedź sukcesu
         return res.status(200).json({
             message: 'Produkt został pomyślnie zwrócony',
             rental: rental
@@ -354,7 +336,6 @@ const returnProduct = async (req, res) => {
         return res.status(500).json({message: 'Błąd podczas zwrotu produktu', error: error.message});
     }
 };
-
 module.exports = {
     rentProduct,
     returnProduct,

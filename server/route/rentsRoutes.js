@@ -13,13 +13,9 @@ const {
     reportDamagedProduct
 } = require('../controllers/rentsController');
 
-// Podstawowe trasy
-router.route('/').get(getAllRents);
-router.route('/rent/:id').get(getRentalById);
 
-// Funkcje wypożyczania i zwrotu
 router.route('/rent').post(rentProduct);
-router.route('/return').post(returnProduct);
+router.route('/return/:rentalId').post(returnProduct);
 
 // Specjalne zapytania
 router.route('/active').get(getActiveRents);
@@ -29,5 +25,9 @@ router.route('/client/:clientId').get(getClientRentals);
 // Operacje na wypożyczeniach
 router.route('/:rentalId/cancel').post(cancelRental);
 router.route('/:rentalId/damage').post(reportDamagedProduct);
+
+// Podstawowe trasy
+router.route('/').get(getAllRents);
+router.route('/:id').get(getRentalById);
 
 module.exports = router;
