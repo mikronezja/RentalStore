@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-    title:{
+    title: {
         type: String,
         required: true,
         trim: true
@@ -22,20 +22,22 @@ const productSchema = new mongoose.Schema({
         enum: ['movie', 'audiobook', 'book', 'music', 'game'],
         default: 'movie'
     },
-    stock: {
-        type: Number,
+    status: {
+        type: String,
         required: true,
-        min: 0
+        enum: ['available', 'rented', 'reserved', 'damaged', 'maintenance'],
+        default: 'available'
     },
-    reserved: {
-        type: Number,
-        default: 0,
-        min: 0
+    condition: {
+        type: String,
+        required: true,
+        enum: ['new', 'good', 'fair', 'poor', 'damaged'],
+        default: 'new'
     },
     reviews: [{
-        user: {
+        clientId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'Client',
             required: true
         },
         rating: {
@@ -47,6 +49,10 @@ const productSchema = new mongoose.Schema({
         comment: {
             type: String,
             trim: true
+        },
+        date: {
+            type: Date,
+            default: Date.now
         }
     }],
 }, {timestamps: true})

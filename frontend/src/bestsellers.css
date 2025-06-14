@@ -1,0 +1,60 @@
+/* Bestsellers.css */
+
+.bestsellers-wrapper {
+  flex: 1;
+  padding-left: 50px;
+  border-left: 1px solid #ccc;
+  position: sticky;
+  top: 30px;
+  align-self: flex-start;
+}
+
+.bestsellers-title {
+  font-size: 50px;
+  margin-bottom: 30px;
+}
+
+.bestseller-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  justify-content: space-between;
+  padding-right: 50px;
+}
+
+.bestseller-card {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bestseller-card:hover {
+  transform: scale(1.005);
+}
+
+.bestseller-name {
+  font-size: 32px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.bestseller-description {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.bestseller-opinion {
+  font-style: italic;
+  color: #666;
+  font-size: 14px;
+  margin-top: auto;
+}
