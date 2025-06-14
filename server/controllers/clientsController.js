@@ -51,11 +51,12 @@ const getClientById = async (req, res) => {
 
 // Tworzenie nowego klienta
 const createClient = async (req, res) => {
-    const { firstName, lastName, email, phone, address } = req.body;
+    console.log("hello: ", req.body);
+    const { name, email, phone, address, rank } = req.body;
 
     // Walidacja podstawowych pól
-    if (!firstName || !lastName || !email) {
-        return res.status(400).json({ message: 'Imię, nazwisko i email są wymagane' });
+    if (!name || !phone || !email) {
+        return res.status(400).json({ message: 'Imię, nazwisko, email i telefon są wymagane' });
     }
 
     try {
@@ -65,13 +66,16 @@ const createClient = async (req, res) => {
             return res.status(400).json({ message: 'Klient z tym adresem email już istnieje' });
         }
 
-        const newClient = new Client({
-            firstName,
-            lastName,
+        const clientData = {
+            name,
             email,
             phone,
-            address
-        });
+        };
+
+        if (address) clientData.address = address;
+        if (rank) clientData.rank = rank;
+
+        const newClient = new Client(clientData);
 
         await newClient.save();
         res.status(201).json(newClient);
