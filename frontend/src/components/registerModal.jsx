@@ -5,7 +5,7 @@ import { Modal, Input } from 'antd';
 const RegisterModal = ({ isOpen, onClose, onRegister, employeeId, setEmployeeId }) => {
   return (
     <Modal
-      title="Rejestracja Pracownika"
+      title={<span className="register-modal-title">Rejestracja Pracownika</span>}
       open={isOpen}
       onOk={onRegister}
       onCancel={onClose}

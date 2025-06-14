@@ -1,56 +1,35 @@
-// Admin.jsx
-import React, { useState } from 'react';
-import { Input, Button, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Input, Button, Modal, message } from 'antd';
 
-const allMovies = [
-  {
-    id: '001',
-    title: "Incepcja",
-    description: "Film o snach w snach, pełen akcji i zaskoczeń.",
-    status: "na stanie"
-  },
-  {
-    id: '002',
-    title: "Shrek",
-    description: "Zabawna bajka o zielonym ogrze.",
-    status: "zarezerwowane"
-  },
-  {
-    id: '003',
-    title: "Gladiator",
-    description: "Rzymski generał staje się gladiatorem.",
-    status: "wypożyczone"
-  },
-    {
-    id: '001',
-    title: "Incepcja",
-    description: "Film o snach w snach, pełen akcji i zaskoczeń.",
-    status: "na stanie"
-  },
-  {
-    id: '002',
-    title: "Shrek",
-    description: "Zabawna bajka o zielonym ogrze.",
-    status: "zarezerwowane"
-  },
-  {
-    id: '003',
-    title: "Gladiator",
-    description: "Rzymski generał staje się gladiatorem.",
-    status: "wypożyczone"
-  }
-];
+const API_BASE = 'http://localhost:3000/api'; // Dopasuj do swojego adresu API
 
 const Admin = () => {
   const [searchId, setSearchId] = useState('');
-  const [filteredMovies, setFilteredMovies] = useState(allMovies);
+  const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [actionType, setActionType] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [clientId, setClientId] = useState('');
 
+  // Pobierz dane z API po załadowaniu komponentu
+  useEffect(() => {
+    fetchMovies();
+  }, []);
+
+  const fetchMovies = async () => {
+    try {
+      const res = await axios.get(`${API_BASE}/products`);
+      setMovies(res.data);
+      setFilteredMovies(res.data);
+    } catch (error) {
+      message.error('Błąd podczas pobierania danych z serwera.');
+    }
+  };
+
   const handleSearch = () => {
-    const results = allMovies.filter(movie => movie.id.includes(searchId));
+    const results = movies.filter(movie => movie.id.includes(searchId));
     setFilteredMovies(results.length > 0 ? results : []);
   };
 
@@ -60,10 +39,32 @@ const Admin = () => {
     setModalVisible(true);
   };
 
-  const handleAction = () => {
-    console.log(`Akcja: ${actionType}, Film: ${selectedMovie.title}, Klient ID: ${clientId}`);
-    setModalVisible(false);
-    setClientId('');
+  const handleAction = async () => {
+    if (!clientId) {
+      message.warning("Podaj ID klienta.");
+      return;
+    }
+
+    try {
+      const payload = {
+        productId: selectedMovie.id,
+        clientId: clientId,
+      };
+
+      if (actionType === 'zarezerwuj' || actionType === 'wypożycz') {
+        await axios.post(`${API_BASE}/rents/rent`, payload);
+      } else if (actionType === 'zwróć') {
+        await axios.post(`${API_BASE}/rents/return`, payload);
+      }
+
+      message.success(`Akcja "${actionType}" zakończona pomyślnie`);
+      setModalVisible(false);
+      setClientId('');
+      fetchMovies(); // odśwież dane
+    } catch (error) {
+      message.error('Błąd podczas wykonywania akcji.');
+    }
+
   };
 
   return (
@@ -86,6 +87,7 @@ const Admin = () => {
               <h3>{movie.title}</h3>
               <p className="admin-description">{movie.description}</p>
               <p className="admin-status">Status: {movie.status}</p>
+              <p> {movie.id} </p>
             </div>
             <div className="admin-actions">
               <Button onClick={() => openModal("zarezerwuj", movie)}>Zarezerwuj</Button>
@@ -97,7 +99,7 @@ const Admin = () => {
       </div>
 
       <Modal
-        title={`Akcja: ${actionType}`}
+        title={<span className="register-modal-title">Akcja: {actionType}</span>}
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         onOk={handleAction}
