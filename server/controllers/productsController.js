@@ -181,10 +181,11 @@ const getProductsByStatus = async (req, res) => {
 // Dodawanie opinii dla produktu
 const addProductReview = async (req, res) => {
     const { id } = req.params;
-    const { client, rating, comment } = req.body;
+    const { username, rating, comment } = req.body;
+
 
     // Sprawdzenie poprawności danych wejściowych
-    if (!client || !rating) {
+    if (!username || !rating) {
         return res.status(400).json({ message: 'Wymagane pola: klient (ID lub email) i ocena' });
     }
 
@@ -201,10 +202,10 @@ const addProductReview = async (req, res) => {
         // Identyfikacja klienta na podstawie ID lub adresu email
         let clientDoc;
 
-        if (mongoose.Types.ObjectId.isValid(client)) {
-            clientDoc = await Client.findById(client).session(session);
+        if (mongoose.Types.ObjectId.isValid(username)) {
+            clientDoc = await Client.findById(username).session(session);
         } else {
-            clientDoc = await Client.findOne({ email: client }).session(session);
+            clientDoc = await Client.findOne({ email: username }).session(session);
         }
 
         if (!clientDoc) {
@@ -229,15 +230,14 @@ const addProductReview = async (req, res) => {
             clientId: clientId, // Zmieniono z client na clientId zgodnie ze schematem
             rating,
             comment: comment || '',
-            createdAt: new Date()
         };
 
         // Aktualizacja produktu bez walidacji (aby obejść problem ze schematem)
         product.reviews.push(newReview);
 
         // Aktualizacja średniej oceny
-        const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
-        product.avgRating = Number((totalRating / product.reviews.length).toFixed(1));
+        // const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
+        // product.avgRating = Number((totalRating / product.reviews.length).toFixed(1));
 
         await product.save({ session });
 
@@ -247,8 +247,7 @@ const addProductReview = async (req, res) => {
 
         res.status(201).json({
             message: 'Opinia została dodana pomyślnie',
-            review: newReview,
-            avgRating: product.avgRating
+            review: newReview
         });
     } catch (error) {
         // W przypadku błędu wycofujemy transakcję

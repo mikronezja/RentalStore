@@ -46,10 +46,10 @@ function MovieSearch() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/api/products/${selectedMovie._id}/${encodeURIComponent(username)}`, {
+      const res = await fetch(`http://localhost:3000/api/products/review/${selectedMovie._id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rating, comment })
+        body: JSON.stringify({ username, rating, comment })
       });
 
       if (res.ok) {

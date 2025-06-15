@@ -28,6 +28,6 @@ router.route('/:id')
     .put(updateProduct)
     .delete(deleteProduct);
 
-// router.route('/:productId/:clientId').post(addReview) // mozna przeniesc do osobnego controllera albo tu zostawic
+router.route('/:productId').post(addReview) // mozna przeniesc do osobnego controllera albo tu zostawic
 
 module.exports = router;
