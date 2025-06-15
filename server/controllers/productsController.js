@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const {
     Product,
-    RentalHistory
+    RentalHistory,
+    Client
 } = require('../models/index');
 
 // Get all products
@@ -176,6 +178,86 @@ const getProductsByStatus = async (req, res) => {
     }
 }
 
+// Dodawanie opinii dla produktu
+const addProductReview = async (req, res) => {
+    const { id } = req.params;
+    const { client, rating, comment } = req.body;
+
+    // Sprawdzenie poprawności danych wejściowych
+    if (!client || !rating) {
+        return res.status(400).json({ message: 'Wymagane pola: klient (ID lub email) i ocena' });
+    }
+
+    // Sprawdzenie czy ocena jest prawidłowa (zakres 1-5)
+    if (rating < 1 || rating > 5) {
+        return res.status(400).json({ message: 'Ocena musi być w zakresie od 1 do 5' });
+    }
+
+    // Rozpoczęcie transakcji
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        // Identyfikacja klienta na podstawie ID lub adresu email
+        let clientDoc;
+
+        if (mongoose.Types.ObjectId.isValid(client)) {
+            clientDoc = await Client.findById(client).session(session);
+        } else {
+            clientDoc = await Client.findOne({ email: client }).session(session);
+        }
+
+        if (!clientDoc) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({ message: 'Nie znaleziono klienta' });
+        }
+
+        const clientId = clientDoc._id;
+
+        // Sprawdzamy, czy produkt istnieje
+        const product = await Product.findById(id).session(session);
+
+        if (!product) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({ message: 'Produkt nie został znaleziony' });
+        }
+
+        // Dodajemy nową opinię - używamy nazwy pola zgodnej ze schematem (clientId zamiast client)
+        const newReview = {
+            clientId: clientId, // Zmieniono z client na clientId zgodnie ze schematem
+            rating,
+            comment: comment || '',
+            createdAt: new Date()
+        };
+
+        // Aktualizacja produktu bez walidacji (aby obejść problem ze schematem)
+        product.reviews.push(newReview);
+
+        // Aktualizacja średniej oceny
+        const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
+        product.avgRating = Number((totalRating / product.reviews.length).toFixed(1));
+
+        await product.save({ session });
+
+        // Zatwierdzenie transakcji
+        await session.commitTransaction();
+        session.endSession();
+
+        res.status(201).json({
+            message: 'Opinia została dodana pomyślnie',
+            review: newReview,
+            avgRating: product.avgRating
+        });
+    } catch (error) {
+        // W przypadku błędu wycofujemy transakcję
+        await session.abortTransaction();
+        session.endSession();
+        res.status(500).json({ message: 'Błąd podczas dodawania opinii', error: error.message });
+    }
+}
+
 module.exports = {
     getAllProducts,
     getMostPopularProducts,
@@ -184,5 +266,6 @@ module.exports = {
     getProductsByStatus,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    addProductReview
 }
