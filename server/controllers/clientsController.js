@@ -1,4 +1,4 @@
-const { Client } = require('../models/index');
+const { Client, RentalHistory } = require('../models/index');
 
 // Pobieranie wszystkich klientów
 const getAllClients = async (req, res) => {
@@ -157,9 +157,14 @@ const getClientRentalHistory = async (req, res) => {
 
 // Pobieranie listy dłużników (klienci z przeterminowanymi wypożyczeniami)
 const getDebtors = async (req, res) => {
+
     const { limit = 10, page = 1 } = req.query;
     const currentDate = new Date();
 
+    console.log('getDebtors function called');
+    console.log('req.params:', req.params);
+    console.log('req.query:', req.query);
+    console.log('req.query.limit:', req.query.limit);
     try {
         // Znajdź wszystkie przeterminowane wypożyczenia
         const overdueRentals = await RentalHistory.find({

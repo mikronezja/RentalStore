@@ -7,13 +7,16 @@ const {
     createClient,
     updateClient,
     deleteClient,
-    getClientRentalHistory
+    getClientRentalHistory,
+    getDebtors
 } = require('../controllers/clientsController');
 
 
 router.route("/")
     .get(getAllClients)
     .post(createClient)
+
+router.route("/debtors").get(getDebtors); // zmieniona kolejnosc zeby nie bylo bledow
 
 router.route("/:id")
     .get(getClientById)
@@ -23,7 +26,7 @@ router.route("/:id")
 router.route("/:id/rentals")
     .get(getClientRentalHistory);
 
-//router.route("/debtors").get(getDebtors);
+
 
 
 module.exports = router;
