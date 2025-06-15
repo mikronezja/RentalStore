@@ -44,7 +44,6 @@ const RentalSearch = () => {
     setSelectedProduct(product);
     setModalVisible(true);
     setClientEmail(''); // wyczyść pola przy otwarciu modalu
-    //setemployeeEmail('');
   };
 
 const handleRent = async () => {

@@ -14,7 +14,7 @@ const Debtors = () => {
       try {
         const response = await axios.get(`${API_BASE}/rents/overdue`);
         console.log("Odpowiedź z API:", response.data);
-        setDebtors(response.data.rents); // <-- dostosowanie do struktury danych
+        setDebtors(response.data.rents);
       } catch (error) {
         console.error('Błąd pobierania danych:', error);
         message.error('Błąd podczas pobierania listy dłużników.');
