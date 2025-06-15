@@ -296,8 +296,7 @@ const rentProduct = async (req, res) => {
             worker: workerDoc._id,
             rentalPeriod,
             status: 'rented',
-            conditionBefore,
-            priceCharged: req.body.priceCharged || 0,
+            conditionBefore: conditionBefore,
             notes: req.body.notes || ''
         });
 
