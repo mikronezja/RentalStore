@@ -5,6 +5,7 @@ const getAllClients = async (req, res) => {
     const { limit = 10, page = 1, search } = req.query;
     const query = {};
 
+
     // Dodanie wyszukiwania po imieniu lub nazwisku
     if (search) {
         query.$or = [
@@ -18,6 +19,8 @@ const getAllClients = async (req, res) => {
             .skip(page > 0 ? (page - 1) * limit : 0)
             .limit(parseInt(limit))
             .sort({ lastName: 1, firstName: 1 });
+
+        console.log(clients);
 
         const total = await Client.countDocuments(query);
 
@@ -35,14 +38,14 @@ const getAllClients = async (req, res) => {
 // Pobieranie klienta po ID
 const getClientById = async (req, res) => {
     const { id } = req.params;
-
+    // console.log(id);
     try {
         const client = await Client.findById(id);
 
         if (!client) {
             return res.status(404).json({ message: 'Klient nie został znaleziony' });
         }
-
+        console.log(client);
         res.status(200).json(client);
     } catch (error) {
         res.status(500).json({ message: 'Błąd podczas pobierania klienta', error: error.message });
@@ -87,7 +90,7 @@ const createClient = async (req, res) => {
 // Aktualizacja klienta
 const updateClient = async (req, res) => {
     const { id } = req.params;
-    const { firstName, lastName, email, phone, address } = req.body;
+    const { name, email, phone, address } = req.body;
 
     try {
         // Sprawdzenie czy klient istnieje
@@ -106,7 +109,7 @@ const updateClient = async (req, res) => {
 
         const updatedClient = await Client.findByIdAndUpdate(
             id,
-            { firstName, lastName, email, phone, address },
+            { name, email, phone, address },
             { new: true, runValidators: true }
         );
 
