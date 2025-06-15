@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const {
     Product,
-    RentalHistory
+    RentalHistory,
+    Client,
+    Worker
 } = require('../models/index');
 
 
