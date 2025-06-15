@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, Modal, message } from 'antd';
+import { useEmployee } from '../context/EmployeeContext';
 
 const API_BASE = 'http://localhost:3000/api';
 
@@ -13,7 +14,8 @@ const RentalSearch = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [clientEmail, setClientEmail] = useState('');
-  const [workerEmail, setWorkerEmail] = useState('');
+  const { employeeEmail, setEmployeeEmail } = useEmployee();
+  console.log(employeeEmail);
 
   useEffect(() => {
     const fetchAvailableProducts = async () => {
@@ -42,11 +44,11 @@ const RentalSearch = () => {
     setSelectedProduct(product);
     setModalVisible(true);
     setClientEmail(''); // wyczyść pola przy otwarciu modalu
-    setWorkerEmail('');
+    //setemployeeEmail('');
   };
 
 const handleRent = async () => {
-  if (!clientEmail || !workerEmail) {
+  if (!clientEmail || !employeeEmail) {
     message.warning("Uzupełnij wszystkie dane.");
     return;
   }
@@ -58,7 +60,7 @@ const handleRent = async () => {
       body: JSON.stringify({
         productId: selectedProduct._id,
         client: clientEmail,
-        worker: workerEmail
+        worker: employeeEmail
       })
     });
 
@@ -138,9 +140,10 @@ const handleRent = async () => {
           style={{ marginBottom: 10 }}
         />
         <Input
-          placeholder="Email pracownika"
-          value={workerEmail}
-          onChange={(e) => setWorkerEmail(e.target.value)}
+          addonBefore="Email pracownika"
+          disabled
+          value={employeeEmail}
+          //onChange={(e) => setWorkerEmail(e.target.value)}
         />
       </Modal>
     </>
