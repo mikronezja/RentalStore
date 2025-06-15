@@ -108,7 +108,7 @@ const ReturnSearch = () => {
     <>
       <div className="search-section" style={{ marginBottom: 20 }}>
         <Input.Search
-          placeholder="Wpisz fragment ID produktu..."
+          placeholder="Wpisz ID produktu..."
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
           onSearch={handleSearch}
@@ -118,7 +118,7 @@ const ReturnSearch = () => {
 
       <div className="admin-results">
         {(filtered.length > 0 ? filtered : movies).map(movie => (
-          <div className="admin-card" key={movie._id} style={{ border: '1px solid #ccc', padding: 10, marginBottom: 10 }}>
+          <div className="admin-card" key={movie._id} style={{ border: '1px solid #ccc', marginBottom: 10 }}>
             <div className="admin-info">
               <h3>{movie.title}</h3>
               <p>{movie.description}</p>

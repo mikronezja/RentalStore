@@ -42,7 +42,6 @@ const Admin = () => {
         : <RentSearch movies={movies.filter(m => m.status === 'available')} />
       }
 
-      {/* Przyciski dolne */}
       <Link to="/debtors">
         <Button
           type="primary"
@@ -57,7 +56,6 @@ const Admin = () => {
         </Button>
       </Link>
   
-      {/* Przycisk do strony głównej */}
       <Link to="/">
         <Button
           type="primary"

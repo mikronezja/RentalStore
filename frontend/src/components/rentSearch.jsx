@@ -41,7 +41,7 @@ const RentalSearch = () => {
   const openModal = (product) => {
     setSelectedProduct(product);
     setModalVisible(true);
-    setClientEmail(''); // wyczyść pola przy otwarciu modalu
+    setClientEmail('');
     setWorkerEmail('');
   };
 
@@ -62,20 +62,16 @@ const handleRent = async () => {
       })
     });
 
-    // Odczytujemy odpowiedź jako tekst
     const text = await res.text();
 
     let data;
     try {
-      // Próba parsowania tekstu jako JSON
       data = JSON.parse(text);
     } catch {
-      // Jeśli nie uda się sparsować, traktujemy odpowiedź jako zwykły tekst
       data = null;
     }
 
     if (!res.ok) {
-      // Jeśli status nie OK, to wyrzucamy błąd z wiadomością albo tekstem
       throw new Error(data?.message || text || "Błąd przy wypożyczaniu");
     }
 
@@ -95,24 +91,25 @@ const handleRent = async () => {
   return (
     <>
       <div className="search-section" style={{ marginBottom: 20 }}>
-        <Input
-          placeholder="Wpisz fragment ID produktu..."
+        <Input.Search
+          placeholder="Wpisz ID produktu..."
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
-          onPressEnter={handleSearch}
-          style={{ width: 300 }}
+          onSearch={handleSearch}
+          className="search-input"
         />
-        <Button onClick={handleSearch} style={{ marginLeft: 10 }}>Szukaj</Button>
       </div>
 
       <div className="admin-results">
         {(filtered.length > 0 ? filtered : products).map(product => (
-          <div key={product._id} style={{ border: '1px solid #ccc', marginBottom: 15, padding: 15, borderRadius: 4 }}>
-            <h3>{product.title}</h3>
-            <p>{product.description}</p>
-            <p><b>Status:</b> {product.status}</p>
-            <p><b>ID:</b> {product._id}</p>
-            <Button type="primary" onClick={() => openModal(product)}>Wypożycz</Button>
+          <div className="admin-card" key={product._id} style={{ border: '1px solid #ccc', marginBottom: 10 }}>
+            <div className="admin-info">
+              <h3>{product.title}</h3>
+              <p>{product.description}</p>
+              <p><b>Status:</b> {product.status}</p>
+              <p><b>ID:</b> {product._id}</p>
+            </div>
+            <Button type="default" onClick={() => openModal(product)}>Wypożycz</Button>
           </div>
         ))}
       </div>
