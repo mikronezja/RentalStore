@@ -30,7 +30,7 @@ function MovieSearch() {
     };
 
     fetchMovies();
-  }, []);
+  }, [showModal]);
 
   const handleCardClick = (movie) => {
     setSelectedMovie(movie);
@@ -53,8 +53,11 @@ function MovieSearch() {
       });
 
       if (res.ok) {
-        const updatedMovie = await res.json();
-        setSelectedMovie(updatedMovie);
+        const newReviewData = await res.json();
+        setSelectedMovie(prevMovie => ({
+        ...prevMovie,
+        reviews: [...(prevMovie.reviews || []), newReviewData.review]
+        }));
         setNewReview({ username: '', rating: 0, comment: '' });
       } else {
         alert("Błąd przy dodawaniu opinii.");
