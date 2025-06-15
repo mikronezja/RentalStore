@@ -220,9 +220,9 @@ const reportDamagedProduct = async (req, res) => {
 };
 
 const rentProduct = async (req, res) => {
-    const {productId, clientId, workerId, rentalTime = 14} = req.body;
+    const {productId, client, worker, rentalTime = 14} = req.body;
 
-    if (!productId || !clientId || !workerId) {
+    if (!productId || !client || !worker) {
         return res.status(400).json({message: 'Wszystkie pola są wymagane'});
     }
 
@@ -231,6 +231,34 @@ const rentProduct = async (req, res) => {
     session.startTransaction();
 
     try {
+        // Znajdź klienta po ID lub email
+        let clientDoc;
+        if (mongoose.Types.ObjectId.isValid(client)) {
+            clientDoc = await Client.findById(client).session(session);
+        } else {
+            clientDoc = await Client.findOne({ email: client }).session(session);
+        }
+
+        if (!clientDoc) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({message: 'Nie znaleziono klienta'});
+        }
+
+        // Znajdź pracownika po ID lub email
+        let workerDoc;
+        if (mongoose.Types.ObjectId.isValid(worker)) {
+            workerDoc = await Worker.findById(worker).session(session);
+        } else {
+            workerDoc = await Worker.findOne({ email: worker }).session(session);
+        }
+
+        if (!workerDoc) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({message: 'Nie znaleziono pracownika'});
+        }
+
         // upewiamy sie ze produkt istnieje i jest dostępny i od razu go zaklepujemy
         const product = await Product.findOneAndUpdate(
             {
@@ -247,7 +275,6 @@ const rentProduct = async (req, res) => {
             }
         );
 
-
         if (!product) {
             await session.abortTransaction();
             session.endSession();
@@ -263,12 +290,12 @@ const rentProduct = async (req, res) => {
 
         const rentalHistory = new RentalHistory({
             product: productId,
-            client: clientId,
-            worker: workerId,
+            client: clientDoc._id,
+            worker: workerDoc._id,
             rentalPeriod,
             status: 'rented',
             conditionBefore,
-            priceCharged: req.body.priceCharged || 0, // Dodanie brakującego pola
+            priceCharged: req.body.priceCharged || 0,
             notes: req.body.notes || ''
         });
 
@@ -288,7 +315,6 @@ const rentProduct = async (req, res) => {
         res.status(500).json({message: 'Błąd podczas wypożyczania produktu', error: error.message});
     }
 };
-
 // zwrot produktu
 const returnProduct = async (req, res) => {
     const { rentalId } = req.params;
