@@ -1,8 +1,10 @@
-// RegisterModal.jsx
 import React from 'react';
 import { Modal, Input } from 'antd';
+import { useEmployee } from '../context/EmployeeContext';
 
-const RegisterModal = ({ isOpen, onClose, onRegister, employeeId, setEmployeeId }) => {
+const RegisterModal = ({ isOpen, onClose, onRegister }) => {
+  const { employeeEmail, setEmployeeEmail } = useEmployee();
+
   return (
     <Modal
       title={<span className="register-modal-title">Rejestracja Pracownika</span>}
@@ -16,9 +18,9 @@ const RegisterModal = ({ isOpen, onClose, onRegister, employeeId, setEmployeeId 
       className="register-modal"
     >
       <Input
-        placeholder="Wprowadź ID pracownika"
-        value={employeeId}
-        onChange={(e) => setEmployeeId(e.target.value)}
+        placeholder="Wprowadź mail pracownika"
+        value={employeeEmail}
+        onChange={(e) => setEmployeeEmail(e.target.value)}
         className="register-input"
       />
     </Modal>

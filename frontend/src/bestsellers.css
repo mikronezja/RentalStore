@@ -11,13 +11,13 @@
 
 .bestsellers-title {
   font-size: 50px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .bestseller-cards {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
   justify-content: space-between;
   padding-right: 50px;
 }

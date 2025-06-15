@@ -3,17 +3,19 @@
 .register-modal .ant-modal-content {
   background-color: rgb(255, 255, 255);
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .register-input {
   font-size: 16px;
-  padding: 16px;
+  padding: 12px;
   border-radius: 12px;
   border: 2px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: rgb(255, 255, 255);
   transition: transform 0.2s ease;
+  margin-bottom: 12px;
 }
 
 .register-input:hover,
@@ -26,5 +28,16 @@
   font-size: 22px;
   font-weight: 600;
   text-align: center;
+  margin-bottom: 12px;
 }
 
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
