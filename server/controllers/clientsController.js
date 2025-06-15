@@ -9,8 +9,8 @@ const getAllClients = async (req, res) => {
     // Dodanie wyszukiwania po imieniu lub nazwisku
     if (search) {
         query.$or = [
-            { firstName: { $regex: search, $options: 'i' } },
-            { lastName: { $regex: search, $options: 'i' } }
+            { name: { $regex: `^${search}\\s[a-zA-Z]*`, $options: 'i' } },
+            { name: { $regex: `[a-zA-Z]*\\s${search}$`, $options: 'i' } }
         ];
     }
 
@@ -18,7 +18,7 @@ const getAllClients = async (req, res) => {
         const clients = await Client.find(query)
             .skip(page > 0 ? (page - 1) * limit : 0)
             .limit(parseInt(limit))
-            .sort({ lastName: 1, firstName: 1 });
+            .sort({ name: 1 });
 
         console.log(clients);
 
