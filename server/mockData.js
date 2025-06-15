@@ -285,7 +285,8 @@ const seedDatabase = async () => {
                 status: "returned",
                 notes: "Zwrócono w terminie, bez uszkodzeń",
                 conditionBefore: "good",
-                conditionAfter: "good"
+                conditionAfter: "good",
+                priceCharged: 25.00
             },
             {
                 product: createdProducts[3]._id, // Władca Pierścieni
@@ -298,6 +299,7 @@ const seedDatabase = async () => {
                 status: "rented",
                 notes: "Klient chciał wydanie reżyserskie",
                 conditionBefore: "fair",
+                priceCharged: 15.00
             },
             {
                 product: createdProducts[6]._id, // FIFA 23
@@ -311,7 +313,8 @@ const seedDatabase = async () => {
                 status: "overdue",
                 notes: "Zwrócono po terminie, naliczono dodatkową opłatę",
                 conditionBefore: "fair",
-                conditionAfter: "fair"
+                conditionAfter: "fair",
+                priceCharged: 35.00
             },
             {
                 product: createdProducts[5]._id, // The Dark Side of the Moon
@@ -325,7 +328,343 @@ const seedDatabase = async () => {
                 status: "damaged",
                 notes: "Płyta zwrócona porysowana",
                 conditionBefore: "good",
-                conditionAfter: "poor"
+                conditionAfter: "poor",
+                priceCharged: 40.00
+            },
+            {
+                product: createdProducts[1]._id, // Harry Potter
+                client: createdClients[3]._id, // Agnieszka Dąbrowska
+                worker: createdWorkers[1]._id, // Karolina Zielińska
+                rentalPeriod: {
+                    start: new Date("2023-01-10"),
+                    end: new Date("2023-01-24"),
+                    returned: new Date("2023-01-23")
+                },
+                status: "returned",
+                notes: "Klient bardzo zadowolony",
+                conditionBefore: "new",
+                conditionAfter: "good",
+                priceCharged: 12.00
+            },
+            {
+                product: createdProducts[2]._id, // Incepcja
+                client: createdClients[0]._id, // Jan Kowalski
+                worker: createdWorkers[0]._id, // Marek Kowalczyk
+                rentalPeriod: {
+                    start: new Date("2023-02-05"),
+                    end: new Date("2023-02-12"),
+                    returned: new Date("2023-02-14")
+                },
+                status: "overdue",
+                notes: "Klient zapomniał o terminie zwrotu",
+                conditionBefore: "good",
+                conditionAfter: "good",
+                priceCharged: 22.00
+            },
+            {
+                product: createdProducts[4]._id, // Metro 2033
+                client: createdClients[1]._id, // Anna Nowak
+                worker: createdWorkers[3]._id, // Aleksandra Wójcik
+                rentalPeriod: {
+                    start: new Date("2023-03-01"),
+                    end: new Date("2023-03-15"),
+                    returned: new Date("2023-03-10")
+                },
+                status: "returned",
+                notes: "Klient zwrócił wcześniej",
+                conditionBefore: "new",
+                conditionAfter: "new",
+                priceCharged: 18.00
+            },
+            {
+                product: createdProducts[7]._id, // Sapiens
+                client: createdClients[2]._id, // Piotr Wiśniewski
+                worker: createdWorkers[2]._id, // Michał Szymański
+                rentalPeriod: {
+                    start: new Date("2023-05-25"),
+                    end: new Date("2023-06-08")
+                },
+                status: "rented",
+                notes: "Klient zainteresowany kupnem po przeczytaniu",
+                conditionBefore: "good",
+                priceCharged: 20.00
+            },
+            {
+                product: createdProducts[0]._id, // Wiedźmin 3
+                client: createdClients[4]._id, // Tomasz Lewandowski
+                worker: createdWorkers[1]._id, // Karolina Zielińska
+                rentalPeriod: {
+                    start: new Date("2023-04-05"),
+                    end: new Date("2023-04-19"),
+                    returned: new Date("2023-04-18")
+                },
+                status: "returned",
+                notes: "Klient zachwycony grą",
+                conditionBefore: "good",
+                conditionAfter: "good",
+                priceCharged: 25.00
+            },
+            {
+                product: createdProducts[2]._id, // Incepcja
+                client: createdClients[1]._id, // Anna Nowak
+                worker: createdWorkers[0]._id, // Marek Kowalczyk
+                rentalPeriod: {
+                    start: new Date("2023-05-20"),
+                    end: new Date("2023-06-03")
+                },
+                status: "rented",
+                notes: "Film na weekend",
+                conditionBefore: "good",
+                priceCharged: 15.00
+            },
+            {
+                product: createdProducts[1]._id, // Harry Potter
+                client: createdClients[0]._id, // Jan Kowalski
+                worker: createdWorkers[3]._id, // Aleksandra Wójcik
+                rentalPeriod: {
+                    start: new Date("2023-02-15"),
+                    end: new Date("2023-03-01"),
+                    returned: new Date("2023-02-25")
+                },
+                status: "returned",
+                notes: "Wypożyczenie dla dzieci",
+                conditionBefore: "new",
+                conditionAfter: "good",
+                priceCharged: 12.00
+            },
+            {
+                product: createdProducts[6]._id, // FIFA 23
+                client: createdClients[3]._id, // Agnieszka Dąbrowska
+                worker: createdWorkers[2]._id, // Michał Szymański
+                rentalPeriod: {
+                    start: new Date("2023-05-15"),
+                    end: new Date("2023-05-29"),
+                    returned: new Date("2023-05-22")
+                },
+                status: "returned",
+                notes: "Prezent dla syna",
+                conditionBefore: "fair",
+                conditionAfter: "fair",
+                priceCharged: 30.00
+            },
+            {
+                product: createdProducts[4]._id, // Metro 2033
+                client: createdClients[2]._id, // Piotr Wiśniewski
+                worker: createdWorkers[1]._id, // Karolina Zielińska
+                rentalPeriod: {
+                    start: new Date("2023-01-20"),
+                    end: new Date("2023-02-03"),
+                    returned: new Date("2023-02-05")
+                },
+                status: "overdue",
+                notes: "Zwrócono z małym opóźnieniem",
+                conditionBefore: "new",
+                conditionAfter: "good",
+                priceCharged: 20.00
+            },
+            {
+                product: createdProducts[0]._id, // Wiedźmin 3
+                client: createdClients[2]._id, // Piotr Wiśniewski
+                worker: createdWorkers[0]._id, // Marek Kowalczyk
+                rentalPeriod: {
+                    start: new Date("2023-02-20"),
+                    end: new Date("2023-03-06"),
+                    returned: new Date("2023-03-04")
+                },
+                status: "returned",
+                notes: "Klient ponownie wypożyczy",
+                conditionBefore: "good",
+                conditionAfter: "good",
+                priceCharged: 25.00
+            },
+            {
+                product: createdProducts[5]._id, // The Dark Side of the Moon
+                client: createdClients[3]._id, // Agnieszka Dąbrowska
+                worker: createdWorkers[2]._id, // Michał Szymański
+                rentalPeriod: {
+                    start: new Date("2023-01-05"),
+                    end: new Date("2023-01-19"),
+                    returned: new Date("2023-01-19")
+                },
+                status: "returned",
+                notes: "Klient zainteresowany innymi albumami",
+                conditionBefore: "fair",
+                conditionAfter: "fair",
+                priceCharged: 15.00
+            },
+            {
+                product: createdProducts[2]._id, // Incepcja
+                client: createdClients[4]._id, // Tomasz Lewandowski
+                worker: createdWorkers[3]._id, // Aleksandra Wójcik
+                rentalPeriod: {
+                    start: new Date("2023-04-10"),
+                    end: new Date("2023-04-17"),
+                    returned: new Date("2023-04-16")
+                },
+                status: "returned",
+                notes: "Film na weekend",
+                conditionBefore: "good",
+                conditionAfter: "good",
+                priceCharged: 15.00
+            },
+            {
+                product: createdProducts[3]._id, // Władca Pierścieni
+                client: createdClients[0]._id, // Jan Kowalski
+                worker: createdWorkers[1]._id, // Karolina Zielińska
+                rentalPeriod: {
+                    start: new Date("2023-03-25"),
+                    end: new Date("2023-04-08"),
+                    returned: new Date("2023-04-10")
+                },
+                status: "overdue",
+                notes: "Niewielkie opóźnienie",
+                conditionBefore: "fair",
+                conditionAfter: "fair",
+                priceCharged: 18.00
+            },
+            {
+                product: createdProducts[7]._id, // Sapiens
+                client: createdClients[4]._id, // Tomasz Lewandowski
+                worker: createdWorkers[0]._id, // Marek Kowalczyk
+                rentalPeriod: {
+                    start: new Date("2023-04-01"),
+                    end: new Date("2023-04-15"),
+                    returned: new Date("2023-04-14")
+                },
+                status: "returned",
+                notes: "Klient polecił książkę znajomym",
+                conditionBefore: "good",
+                conditionAfter: "good",
+                priceCharged: 20.00
+            },
+            {
+                product: createdProducts[1]._id, // Harry Potter
+                client: createdClients[1]._id, // Anna Nowak
+                worker: createdWorkers[2]._id, // Michał Szymański
+                rentalPeriod: {
+                    start: new Date("2023-04-25"),
+                    end: new Date("2023-05-09"),
+                    returned: new Date("2023-05-09")
+                },
+                status: "returned",
+                notes: "Klient zainteresowany kolejnymi częściami",
+                conditionBefore: "good",
+                conditionAfter: "fair",
+                priceCharged: 12.00
+            },
+            {
+                product: createdProducts[4]._id, // Metro 2033
+                client: createdClients[3]._id, // Agnieszka Dąbrowska
+                worker: createdWorkers[0]._id, // Marek Kowalczyk
+                rentalPeriod: {
+                    start: new Date("2023-05-15"),
+                    end: new Date("2023-05-29")
+                },
+                status: "rented",
+                notes: "Klient pierwszy raz wypożycza audiobook",
+                conditionBefore: "good",
+                priceCharged: 18.00
+            },
+            // Kilka przeterminowanych wypożyczeń
+            {
+                product: createdProducts[6]._id, // FIFA 23
+                client: createdClients[0]._id, // Jan Kowalski
+                worker: createdWorkers[1]._id, // Karolina Zielińska
+                rentalPeriod: {
+                    start: new Date("2023-05-01"),
+                    end: new Date("2023-05-15")
+                },
+                status: "rented", // przeterminowane, ale jeszcze niezwrócone
+                notes: "Klient nie zwrócił w terminie",
+                conditionBefore: "fair",
+                priceCharged: 30.00
+            },
+            {
+                product: createdProducts[7]._id, // Sapiens
+                client: createdClients[3]._id, // Agnieszka Dąbrowska
+                worker: createdWorkers[3]._id, // Aleksandra Wójcik
+                rentalPeriod: {
+                    start: new Date("2023-04-15"),
+                    end: new Date("2023-04-29")
+                },
+                status: "rented", // przeterminowane, ale jeszcze niezwrócone
+                notes: "Klient poprosił o przedłużenie, ale nie zarejestrowano",
+                conditionBefore: "good",
+                priceCharged: 20.00
+            },
+            // Anulowane wypożyczenia
+            {
+                product: createdProducts[2]._id, // Incepcja
+                client: createdClients[2]._id, // Piotr Wiśniewski
+                worker: createdWorkers[1]._id, // Karolina Zielińska
+                rentalPeriod: {
+                    start: new Date("2023-01-15"),
+                    end: new Date("2023-01-22"),
+                    returned: new Date("2023-01-16")
+                },
+                status: "cancelled",
+                notes: "Klient zmienił zdanie dzień po wypożyczeniu",
+                conditionBefore: "good",
+                conditionAfter: "good",
+                priceCharged: 0.00
+            },
+            // Zagubione produkty
+            {
+                product: createdProducts[1]._id, // Harry Potter
+                client: createdClients[4]._id, // Tomasz Lewandowski
+                worker: createdWorkers[2]._id, // Michał Szymański
+                rentalPeriod: {
+                    start: new Date("2023-03-10"),
+                    end: new Date("2023-03-24"),
+                    returned: new Date("2023-04-05")
+                },
+                status: "lost",
+                notes: "Klient zgubił książkę, obciążony kosztami",
+                conditionBefore: "good",
+                priceCharged: 50.00
+            },
+            // Klienci z wieloma wypożyczeniami jednocześnie
+            {
+                product: createdProducts[0]._id, // Wiedźmin 3
+                client: createdClients[1]._id, // Anna Nowak
+                worker: createdWorkers[0]._id, // Marek Kowalczyk
+                rentalPeriod: {
+                    start: new Date("2023-06-01"),
+                    end: new Date("2023-06-15")
+                },
+                status: "rented",
+                notes: "Klient wypożyczył kilka produktów na raz",
+                conditionBefore: "good",
+                priceCharged: 25.00
+            },
+            {
+                product: createdProducts[4]._id, // Metro 2033
+                client: createdClients[1]._id, // Anna Nowak (ta sama osoba, co wyżej)
+                worker: createdWorkers[0]._id, // Marek Kowalczyk
+                rentalPeriod: {
+                    start: new Date("2023-06-01"),
+                    end: new Date("2023-06-15")
+                },
+                status: "rented",
+                notes: "Część pakietu wypożyczeń",
+                conditionBefore: "good",
+                priceCharged: 18.00
+            },
+            // Wielokrotne wypożyczenia tego samego produktu
+            {
+                product: createdProducts[0]._id, // Wiedźmin 3
+                client: createdClients[3]._id, // Agnieszka Dąbrowska
+                worker: createdWorkers[2]._id, // Michał Szymański
+                rentalPeriod: {
+                    start: new Date("2023-01-05"),
+                    end: new Date("2023-01-19"),
+                    returned: new Date("2023-01-17")
+                },
+                status: "returned",
+                notes: "Pierwsze wypożyczenie tego produktu przez klienta",
+                conditionBefore: "good",
+                conditionAfter: "good",
+                priceCharged: 25.00
             }
         ];
         const createdRentals = await RentalHistory.insertMany(rentalHistories);
