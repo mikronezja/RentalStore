@@ -12,7 +12,6 @@ const {
     getMostPopularProducts,
     addProductReview
 } = require('../controllers/productsController');
-const { addReview } = require('../controllers/reviewController');
 
 router.route('/popular').get(getMostPopularProducts);
 router.route('/category/:category').get(getProductsByCategory);
@@ -28,6 +27,5 @@ router.route('/:id')
     .put(updateProduct)
     .delete(deleteProduct);
 
-router.route('/:productId').post(addReview) // mozna przeniesc do osobnego controllera albo tu zostawic
 
 module.exports = router;
