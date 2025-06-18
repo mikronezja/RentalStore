@@ -1,4 +1,3 @@
-/* Bestsellers.css */
 
 .bestsellers-wrapper {
   flex: 1;
@@ -19,7 +18,7 @@
   flex-direction: column;
   gap: 20px;
   justify-content: space-between;
-  padding-right: 50px;
+  padding-right: 20px;
 }
 
 .bestseller-card {
