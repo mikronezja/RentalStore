@@ -9,5 +9,5 @@ Autorzy
 
 Technologie:
 - MongoDB (mongoose), express
-- JavaScript, React, biblioteka antd
+- JavaScript, React, biblioteka antd, axios
   
