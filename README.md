@@ -6,5 +6,6 @@ Autorzy
 - Paweł Czajczyk
 
 Technologie:
-- MongoDB (mongoose)
+- MongoDB (mongoose), express
+- JavaScript, React, biblioteka antd
   
