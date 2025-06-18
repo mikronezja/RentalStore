@@ -169,7 +169,7 @@ const getDebtors = async (req, res) => {
     console.log('req.query:', req.query);
     console.log('req.query.limit:', req.query.limit);
     try {
-        // Znajdź wszystkie przeterminowane wypożyczenia
+        // Znajduje wszystkie przeterminowane wypożyczenia
         const overdueRentals = await RentalHistory.find({
             status: 'rented',
             'rentalPeriod.end': { $lt: currentDate }

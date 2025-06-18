@@ -225,19 +225,12 @@ const addProductReview = async (req, res) => {
             return res.status(404).json({ message: 'Produkt nie został znaleziony' });
         }
 
-        // Dodajemy nową opinię - używamy nazwy pola zgodnej ze schematem (clientId zamiast client)
         const newReview = {
-            clientId: clientId, // Zmieniono z client na clientId zgodnie ze schematem
+            clientId: clientId,
             rating,
             comment: comment || '',
         };
-
-        // Aktualizacja produktu bez walidacji (aby obejść problem ze schematem)
         product.reviews.push(newReview);
-
-        // Aktualizacja średniej oceny
-        // const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
-        // product.avgRating = Number((totalRating / product.reviews.length).toFixed(1));
 
         await product.save({ session });
 
